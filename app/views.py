@@ -11,6 +11,10 @@ class Cart:
         else:
             self.items[product_id] = 1
 
+    def remove(self, product_id):
+        if product_id in self.items:
+            del self.items[product_id]
+
     def get_items(self):
         return [{'product': get_object_or_404(Product, id=pid), 'quantity': qty} for pid, qty in self.items.items()]
 
@@ -18,10 +22,9 @@ class Cart:
         total = 0
         for pid, qty in self.items.items():
             product = get_object_or_404(Product, id=pid)
+            discounted_price = product.price
             if product.discount:
-                discounted_price = product.price - (product.price * product.discount / 100)
-            else:
-                discounted_price = product.price
+                discounted_price -= discounted_price * (product.discount / 100)
             total += discounted_price * qty
         return total
 
@@ -44,6 +47,10 @@ def add_to_cart(request, product_id):
     cart.add(product_id)
     return redirect('store')
 
+def remove_from_cart(request, product_id):
+    cart.remove(product_id)
+    return redirect('store')
+
 def purchase(request):
     if request.method == 'POST':
         username = request.POST.get('username', 'Guest')
@@ -57,8 +64,3 @@ def purchase(request):
         cart.items.clear()
 
         return redirect('store')
-
-def remove_from_cart(request, product_id):
-    if product_id in cart.items:
-        del cart.items[product_id]
-    return redirect('store')
