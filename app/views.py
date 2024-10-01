@@ -13,14 +13,24 @@ class Cart:
             self.items[product_id] = 1
 
     def get_items(self):
-        return [{'product': get_object_or_404(Product, id=pid), 'quantity': qty} for pid, qty in self.items.items()]
-
+        return [{'product': get_object_or_404(
+            Product, id=pid
+            ), 'quantity': qty} for pid,
+            qty in self.items.items()]
+    
+    def get_total_price(self):
+        total = 0
+        for pid, qty in self.items.items():
+            product = get_object_or_404(Product, id=pid)
+            total += product.price * qty
+        return total
 cart = Cart()
 
 def store(request):
     products = Product.objects.all()
     cart_items = cart.get_items()
-    return render(request, 'store.html', {'products': products, 'cart_items': cart_items})
+    total_price = cart.get_total_price()
+    return render(request, 'store.html', {'products': products, 'cart_items': cart_items, 'total_price': total_price})
 
 def add_to_cart(request, product_id):
     cart.add(product_id)
