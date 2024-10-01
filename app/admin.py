@@ -1,19 +1,8 @@
 from django.contrib import admin
-from .models import Item, Order, Cart, CartItem
+from .models import Product
 
-@admin.register(Item)
-class ItemAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'stock', 'image']
-    search_fields = ['name']
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'price', 'stock', 'discount')
+    search_fields = ('name',)
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'status', 'payment_amount']
-
-    def save_model(self, request, obj, form, change):
-        if 'status' in form.changed_data:
-            obj.next_status()
-        super().save_model(request, obj, form, change)
-
-admin.site.register(Cart)
-admin.site.register(CartItem)
+admin.site.register(Product, ProductAdmin)
