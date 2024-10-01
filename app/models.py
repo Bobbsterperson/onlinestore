@@ -15,8 +15,8 @@ class Order(models.Model):
         ('processing', 'Processing'),
         ('shipped', 'Shipped'),
     ]
-    user = models.CharField(max_length=100)  # Assuming you want to track users
-    items = models.JSONField()  # Store item IDs and quantities
+    user = models.CharField(max_length=100)
+    items = models.JSONField()
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='processing')
 

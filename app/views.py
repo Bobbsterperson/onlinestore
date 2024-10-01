@@ -46,16 +46,19 @@ def add_to_cart(request, product_id):
 
 def purchase(request):
     if request.method == 'POST':
-        username = request.POST.get('username', 'Guest')  # You might have a user session instead
+        username = request.POST.get('username', 'Guest')
         order = cart.create_order(username)
 
-        # Decrease stock for each item in the order
         for item_id, quantity in order.items.items():
             product = get_object_or_404(Product, id=item_id)
             product.stock -= quantity
             product.save()
 
-        # Clear the cart after purchase
         cart.items.clear()
 
-        return redirect('store')  # Redirect to the store or a confirmation page
+        return redirect('store')
+
+def remove_from_cart(request, product_id):
+    if product_id in cart.items:
+        del cart.items[product_id]
+    return redirect('store')

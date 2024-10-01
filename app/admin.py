@@ -10,4 +10,4 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status',)
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Order, OrderAdmin)  # Register the Order model
+admin.site.register(Order, OrderAdmin)
