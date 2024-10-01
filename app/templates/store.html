@@ -1,0 +1,23 @@
+<h1>Store</h1>
+<ul>
+    {% for item in items %}
+        <li>
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" width="150" height="150">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+            <p>{{ item.name }} - ${{ item.price }} - Stock: {{ item.stock }}</p>
+            {% if item.stock > 0 %}
+                <form action="{% url 'add_to_cart' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
+            {% else %}
+                <p>Out of stock</p>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'cart_detail' %}">Go to Cart</a>

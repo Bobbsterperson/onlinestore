@@ -1,0 +1,13 @@
+<h1>Your Cart</h1>
+{% if cart.cartitem_set.exists %}
+    <ul>
+        {% for cart_item in cart.cartitem_set.all %}
+            <li>
+                {{ cart_item.item.name }} - Quantity: {{ cart_item.quantity }} - Total Price: ${{ cart_item.total_price }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'checkout' %}">Proceed to Checkout</a>
+{% else %}
+    <p>Your cart is empty.</p>
+{% endif %}
