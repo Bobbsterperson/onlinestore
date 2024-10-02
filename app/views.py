@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, Order
+from .commands import AddToCartCommand, RemoveFromCartCommand
 
 class Cart:
     def __init__(self):
@@ -44,11 +45,13 @@ def store(request):
     return render(request, 'store.html', {'products': products, 'cart_items': cart_items, 'total_price': total_price})
 
 def add_to_cart(request, product_id):
-    cart.add(product_id)
+    command = AddToCartCommand(cart, product_id)
+    command.execute()
     return redirect('store')
 
 def remove_from_cart(request, product_id):
-    cart.remove(product_id)
+    command = RemoveFromCartCommand(cart, product_id)
+    command.execute()
     return redirect('store')
 
 def purchase(request):
@@ -57,4 +60,3 @@ def purchase(request):
         order = cart.create_order(username)
         cart.items.clear()
         return redirect('store')
-
