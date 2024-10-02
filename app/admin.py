@@ -12,10 +12,7 @@ class OrderAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if 'status' in form.changed_data and obj.status == 'shipped':
-            for item_id, quantity in obj.items.items():
-                product = get_object_or_404(Product, id=item_id)
-                product.stock -= quantity
-                product.save()
+            obj.ship_order()
         super().save_model(request, obj, form, change)
 
 admin.site.register(Product, ProductAdmin)
