@@ -1,5 +1,7 @@
+# models.py
 from django.db import models
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User  # Import the built-in User model
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -36,7 +38,6 @@ class Order(models.Model):
             product = get_object_or_404(Product, id=item_id)
             product.stock -= quantity
             product.save()
-            cart.notify_observers()
 
 class Cart:
     def __init__(self):
