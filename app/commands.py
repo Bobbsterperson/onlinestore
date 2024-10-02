@@ -1,4 +1,3 @@
-
 class Command:
     def execute(self):
         pass
@@ -18,3 +17,13 @@ class RemoveFromCartCommand(Command):
 
     def execute(self):
         self.cart.remove(self.product_id)
+
+class PurchaseCommand(Command):
+    def __init__(self, cart, username):
+        self.cart = cart
+        self.username = username
+
+    def execute(self):
+        order = self.cart.create_order(self.username)
+        self.cart.items.clear()
+        return order

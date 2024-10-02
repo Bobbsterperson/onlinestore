@@ -1,6 +1,5 @@
 from django.contrib import admin
 from .models import Product, Order
-from django.shortcuts import get_object_or_404
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name', 'price', 'stock', 'discount')
