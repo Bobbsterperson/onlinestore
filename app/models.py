@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -22,3 +23,9 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order {self.id} by {self.user} - Status: {self.status}"
+    def get_item_list(self):
+        item_list = []
+        for item_id, quantity in self.items.items():
+            product = get_object_or_404(Product, id=item_id)
+            item_list.append(f"{product.name} (x{quantity})")
+        return ", ".join(item_list)

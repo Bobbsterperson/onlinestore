@@ -55,10 +55,6 @@ def purchase(request):
     if request.method == 'POST':
         username = request.POST.get('username', 'Guest')
         order = cart.create_order(username)
-        for item_id, quantity in order.items.items():
-            product = get_object_or_404(Product, id=item_id)
-            product.stock -= quantity
-            product.save()
         cart.items.clear()
         return redirect('store')
 
